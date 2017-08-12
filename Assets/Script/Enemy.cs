@@ -78,7 +78,7 @@ public class Enemy : Status, Iagro
         if (target == null)
             target = defaultTarget;
         currentTarget = target;
-        if (target.tag == "House")//타겟의 태그가 하우스일경우
+        if (target.tag == "House" || projectile != null)//타겟의 태그가 하우스거나 원거리공격이 가능
         {
             myCollisionRadius = transform.Find("Eye").GetComponent<SphereCollider>().radius;
         }

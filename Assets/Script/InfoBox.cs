@@ -48,12 +48,13 @@ public class InfoBox : MonoBehaviour
             if (skill.type == SKILLTYPE.PASSIVE)
             {
             //임시로 
-            float[] value1 = OnlyPassive.GetComponent<PassiveSkill>().GetAllValues();
+            float[] values = OnlyPassive.GetComponent<PassiveSkill>().GetAllValues();
 
-            dict.Add(2, string.Format(skill.description,value1[0],value1[1],value1[2]));
+            dict.Add(2, string.Format(skill.description,values[0],values[1],values[2]));//{0~{2까지의 밸류값을 필요하다면 넣음
             ChangeImage(skill.image);
             WritePassiveSkill(dict);            
             }
+            //패시브가아니라면 액티브
             else
             {
                 dict.Add(2, skill.power.ToString("F2"));//공격력의 ~배 이렇게 써질것
@@ -108,6 +109,7 @@ public class InfoBox : MonoBehaviour
             dict.Add(9, temp.delay.ToString());//바뀔듯?
             dict.Add(10, temp.range.ToString());//공격옆으로 옮길듯?
                                                 //ㄴ근데 6~10은 미구현에가까움ㅎ
+            
             dict.Add(11, temp.description.ToString());
             dict.Add(12, temp.price.ToString());
 
@@ -254,6 +256,7 @@ public class InfoBox : MonoBehaviour
                   case 4: paper.text += "체력 : " + text[i] + "\n"; break;
                   case 5: paper.text += "마력 : " + text[i] + "\n"; break;
                   case 6: paper.text += "크리확률 : " + text[i] + "%\n"; break;
+                  case 7: paper.text += "회피확률 : " + text[i] + "%\n"; break;
                   case 8: paper.text += "속도 : " + text[i] + "%\n"; break;
                   case 9: paper.text += "공격딜레이 : " + text[i] + "초\n"; break;
                   case 10: paper.text += "사정거리증가 : " + text[i] + "%\n"; break;

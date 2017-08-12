@@ -14,7 +14,6 @@ public class QuickSlot : MonoBehaviour {
     //1번으로 무한복붙하기로.. Item필요없다고생각함
     public Slot slot; // 이건 자기자신의 슬롯
     private float printo;
-    //퀵슬롯쓰면 쿨타임도 있어야하지않을까? <<추후에.. 아니면 전체 공통으로 쿨타임 던지던가
 
 	// Use this for initialization
 	void Start () {
@@ -27,10 +26,19 @@ public class QuickSlot : MonoBehaviour {
 
         if(Input.GetKeyDown(CallKey.ToString()) && Time.timeScale != 0 )//inputString == CallKey.ToString() )
         {
-                        slot.SlotUse();
+            if (slot != null)
+                slot.SlotUse();
+            else
+                GetComponent<InvenSlot>().SlotUse();
         }
-
-        printo = this.transform.GetChild(0).GetChild(1).GetComponent<Image>().fillAmount = slot.ShowCoolTime();
+        if (GetComponent<InvenSlot>().item.ID != 0) slot = null;
+        if (transform.childCount > 0)
+        {
+            if (slot != null)
+                printo = this.transform.GetChild(0).GetChild(1).GetComponent<Image>().fillAmount = slot.ShowCoolTime();
+            else
+                printo = this.transform.GetChild(0).GetChild(1).GetComponent<Image>().fillAmount = GetComponent<InvenSlot>().ShowCoolTime();
+        }
     }
 }
 /* 스킬 쿨타임 대로 쭉돌게하기 해결완료

@@ -80,21 +80,21 @@ public class Player : Status
         virtualStatus.minAtk += (int)item.atk;
         virtualStatus.maxAtk += (int)item.atk;
         virtualStatus.def += (int)item.def;
-        virtualStatus.max_Hp += (int)item.hp;
-        virtualStatus.hp += virtualStatus.max_Hp;
+        virtualStatus.max_Hp += (int)item.hp;       
+        virtualStatus.hp += item.hp;
         virtualStatus.max_Mp += (int)item.mp;
-        virtualStatus.mp += virtualStatus.max_Mp;
+        virtualStatus.mp += item.mp;
         virtualStatus.speed += item.speed/100f;
         virtualStatus.atkDelay += (float)item.atkDelay;
         virtualStatus.criPer += item.criPer;
         virtualStatus.dodgePer += item.dodgePer;
         range.localScale +=new Vector3( item.range/2f, 0);//사정거리는 무조건 최소한 0.5라는 의지임
-        archerRange.radius += item.range / 2f; 
-        
+        archerRange.radius += item.range / 2f;
+
         //이 range가 오르면 무기의 range에 영향을 끼쳐야한다
-        
+
         //어택딜레이,크리,회피확률
-//        virtualStatus.CheckOverHpMp();//나중에 Apply가상스탯 이런거 있을때나쓰게될거임
+        CheckOverHpMp();//나중에 Apply가상스탯 이런거 있을때나쓰게될거임
 
         if(virtualStatus.minAtk > virtualStatus.maxAtk)
         {

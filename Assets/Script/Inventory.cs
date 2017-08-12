@@ -91,13 +91,13 @@ public class Inventory : MonoBehaviour {
         //원래 업뎃에 있었는데 난이렇게 만들었으니 여기에 넣어봄
     }
 
-    public void AddItem(int ID, int count =1)//카운트와 해당아이템을 찾을 ID만 챙긴다
+    public void AddItem(int ID,int count =1, bool swap = true)//카운트와 해당아이템을 찾을 ID만 챙긴다
     {
             int index = 21;
         //퀵슬롯에 아이템 있는걸 체크
-        if (quickList != null)
+        if (swap == false)//스왑이 거짓일경우에만 퀵슬롯체크
         {
-            for (int i = 0; i < quickList.transform.childCount; i++)
+            for (int i = 0; i < quickList.transform.childCount /2; i++)
             {
                 //편의를 위해 템프라는걸만들어서 이게 null(없거나 스킬)일경우 혹은 아이템아이디가 다르면 다음으로 넘어갈수있도록
                 var temp = quickList.transform.GetChild(i).GetComponent<QuickSlot>().slot as InvenSlot;

@@ -110,9 +110,6 @@ public class SpawnManager : MonoBehaviour {
         Enemy spawnEnemy = Instantiate(enemys[cur],new Vector3(x,0,y)+ Vector3.up,Quaternion.identity) as Enemy;
         EnemyPowerUp(spawnEnemy, currentWaveNumber );
         spawnEnemy.Death += EnemyDead;
-        //yield return null; //ㅁㄹ
-
-
     }
     // Use this for initialization
     void Start () {

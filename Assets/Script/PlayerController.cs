@@ -86,7 +86,7 @@ public GameObject GetTarget()
 
                         //첫째조건. 내스킬이 하우스전용인가 && 플레이어전용이고 바르게 찍었나를봄
                         if ((Comtemp.houseOnly == true && hit.collider.gameObject.tag == "House")
-                            || (Comtemp.houseOnly == false && hit.collider.gameObject.tag == "Player"))
+                            || (Comtemp.houseOnly == false && hit.collider.gameObject.tag == "Player" || hit.collider.transform.parent.tag == "Player"))
                         {
                             var skillobject = Instantiate(callSkill.prefab, hit.point, transform.rotation);
                             if (Comtemp.costMp == true)
@@ -332,6 +332,7 @@ public GameObject GetTarget()
     }
     private void FixedUpdate()
     {
+
         if (target != null )
         {
 

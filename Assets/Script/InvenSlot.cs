@@ -100,8 +100,14 @@ public class InvenSlot : MonoBehaviour, IDragHandler, IPointerEnterHandler,
         if (data.pointerEnter.GetComponent<EquipSlot>() != null)
         {
             //여기서 맞는창인지 체크하도록함 <장비에서 장비로 드래그드롭할때 틀리면 그냥 돌아감
+            if (item.GetItemType() == ITEMTYPE.CONSUMPTION)
+            {
+                InfoBox.instance.Reset();
+                return;
+            }
             //아이템ID가 0이아닌, 즉 장비중일경우에는
-            SlotUse();
+            else
+                SlotUse();
             //아이템장비적용은 여기서
             //ㄴ슬롯유즈를 한이유는 장비를 더블클릭하면 (사용하면) 끼게되니깐
             //드래그드랍으로 하는식이였는데 결과는 똑같으니 이렇게햇음
@@ -160,11 +166,14 @@ public class InvenSlot : MonoBehaviour, IDragHandler, IPointerEnterHandler,
         }
         else if (eventData.clickCount == 2 && count > 0)
         {
-            SlotUse();
-            eventData.clickCount = 0;
+            if (item.ID != 0)
+            {
+                SlotUse();
+                eventData.clickCount = 0;
+            }
+            if (count == 0)
+                InfoBox.instance.Reset();
         }
-        if (count == 0)
-            InfoBox.instance.Reset();
 
 
     }

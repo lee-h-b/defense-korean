@@ -11,6 +11,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour {
     public static GameManager inst;
     //플레이어,하우스 2개의 생존체크는 게임매니저에서 할거임 둘다 죽으면 GameOver..이런게 뜰거고 스테이지 시작할때도 Start!는 떴음 좋겠음
+    public Image durationImage;
     public Player player;
     public House house;
     public bool InBattle = false;//맨처음은 배틀상태가아님
@@ -41,6 +42,18 @@ public class GameManager : MonoBehaviour {
             ani.Play(ani.clip.name);//속도등의 제어는 안함 몬스터를 가리는 일은 없을거라고봄
             
         }
+    }
+    //디버프창에서 스킬이미지를 띄우기 위함
+    public Sprite Get_SImage(string _Sname)
+    {
+        var skills = GetComponent<SkillDB>().skills;
+        foreach (Skill s in skills.Values)
+        {
+            if (s.prefab.name == _Sname)
+                return s.image;
+        }
+        return null;
+//        return skills[_Sname].image;
     }
 	void Awake () {
         inst = this;
