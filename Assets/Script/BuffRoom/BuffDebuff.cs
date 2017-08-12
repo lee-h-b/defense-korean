@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 //버그. 상태이상이 2개이상 중첩됐을때 문제가 생김 << 1하고 2했을때 1끝나고 2끝나면 2에서 돌려주는 값때문에 1이 영구지속된꼴
 //ㄴ그럼 이미 상태이상이 돌고있으면 그걸받아서 하도록?
@@ -25,15 +26,17 @@ public class BuffDebuff : MonoBehaviour {
     //타입? 내가 어떠한 능력을 감소시킬것인가
     //ㄴ이능력은 ?방깎같은 옵션저하, 속도저하, 도트데미지,행동정지 크게 4종류
 
-        //독,돌,바람으로함
-        //바람은 속도감소 ,회피저하
-        //독은 초당데미지, 크리율감소
-        //돌은 방어,공격감소
+    //독,돌,바람으로함
+    //바람은 속도감소 ,회피저하
+    //독은 초당데미지, 크리율감소
+    //돌은 방어,공격감소
     //3위력 내가 어느정도의 파워로가할것인가?
-
+    
+//    private Image durationImage;//이미지를 에디터에서 미리 초기화하려했으나 안됨 그러니 게임매니저에서 꺼내서씀
+    private GameObject buffScreen;
+    private Image image;
     public float duration;//지속시간
-    public string buffName;//버프의 이름, 이걸통해 버프를 구분하게될거임
-    //해당이름으로 게임오브젝트를 만들고, 그오브젝트에 이컴포넌트가 들어가고, 그뒤에 부모에게 디버프 효과를 가하게될것
+    
     public float startTime, repeatTime;//시작,반복시간
     public Status target;
     public StatusValue backup;//상대의 원래스탯,끝날때 반환함// 원래 하위에 뒀었는데 전부가 가지고 있기에 위로 옮김
@@ -50,11 +53,10 @@ public class BuffDebuff : MonoBehaviour {
     protected virtual void Active()
     {
         target = transform.parent.parent.GetComponent<Status>();//얘의 기본조건은 위에 있는얘가 스테이터스일것
-        //ㄴ 스킬이 디버프 가하는방식이 자식을 만들어서가아니라 디버프 컴포넌트를 직접 넣는식으로 바뀜
-        //ㄴ하드코딩이라 디버프 방식 바뀔때마다 바뀌게되네
-        //ㄴ반복문으로 어찌하면 수정은 될거임
+        //ㄴ 스킬이 디버프 가하는방식이 자식을 만들어서가아니라 디버프 컴포넌트를 직접 넣는식
+
         if (repeatTime > 0)
-        {
+        {            
             InvokeRepeating("Apply", 0, repeatTime);//해당시간에하고 그후 특정간격마다
         }
         else
@@ -63,20 +65,36 @@ public class BuffDebuff : MonoBehaviour {
     }
     
     private void Update()
-    {//끝내기용 < 최적화에 문제있다고 생각함 < 국비니깐 이거말곤 안떠오름
-        if(startTime + duration < Time.time)
+    {
+        if (transform.parent.parent.tag == "Player" && image == null)//버프의 소유자가 플레이어인경우
+        {
+            buffScreen = GameObject.Find("Canvas").transform.Find("BuffDuration").gameObject;
+            image = Instantiate(GameManager.inst.durationImage, buffScreen.transform);
+            var skillName = this.name.Replace("(Clone)", "");
+
+            image.GetComponent<BuffUI>().InitDuration(duration);
+            image.GetComponent<Image>().sprite = GameManager.inst.Get_SImage(skillName);
+        }
+
+
+        //끝내기용 < 최적화에 문제있다고 생각함 < 국비니깐 이거말곤 안떠오름
+        if (startTime + duration < Time.time)
         Invoke("End", 0);
         
     }
     public void Refresh()
     {
         Init(duration, repeatTime);
+        if(image != null)
+        image.GetComponent<BuffUI>().InitDuration(duration);
+
     }
     void Start()
     {
         Active();
         //백업에대한 조건을 걸게될꺼임, 아래는 그 조건에서 벗어났을경우가 됨
-        if (this.transform != this.transform.parent.GetChild(0) && this.transform.parent.childCount >= 2)//TODO ::  뒷구문이 좀이상한듯함
+        //만약 트랜스폼의 부모의 0번째자식과 불일치면서 부모의 자식수가 2개이상
+        if (this.transform != this.transform.parent.GetChild(0) && this.transform.parent.childCount >= 2)
         {
             //만약 이파일이 0번째가 아니라면 그 0번째의 백업을 가져오게됨
             backup = this.transform.parent.GetChild(0).GetComponent<BuffDebuff>().backup;
@@ -92,6 +110,8 @@ public class BuffDebuff : MonoBehaviour {
 
         duration = _duration;
         repeatTime = time;
+
+        //이걸 이미지 드로잉이란 새이름으로 다른곳으로 옮길수도
     }
     //필요한 자료형을 가져가서 쓰는식 < 너무하드코딩같아
     public virtual void Init(float duration, float time, int intval, float floatval)
