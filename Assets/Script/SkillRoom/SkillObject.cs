@@ -58,7 +58,7 @@ public class SkillObject : MonoBehaviour,ISkill {
         addEtc = 0;
     }
 
-    protected virtual BuffDebuff MakeComponent(GameObject target, DebuffType type)//그냥 private로 하고싶었음
+    protected virtual BuffDebuff MakeComponent(GameObject target, DebuffType type)
     {//이름 이상한듯 디버프나 버프주는거 아닌가?
         BuffDebuff temp;
         GameObject objectTemp;

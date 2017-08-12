@@ -32,16 +32,18 @@ public class PeaceSkill : SkillObject
     protected override void Damage(Status target)
     {//이게 하우스인지 아닌지 체크는 스킬 쏠때 이미 하도록했으니깐 거기까지 신경은 안씀
 
+        //여기서 UI로 이미지를 하나 만든걸 보낸다그리고 그거의 제한수명도 여기서보냄
+        //그냥 버프쪽에서함 그저 이 이미지만 보내는걸로도 충분하도록
         if (buffType != BuffType.NONE)
         {
             BuffDebuff temp = MakeComponent(target.gameObject, (DebuffType)buffType);
             switch (buffType)
             {//Init는 기본, 디버프를 기본으로 했기에 전부 음수로하는게 best <<하드코딩?>
-                case BuffType.HEAL: temp.Init((float)damage / 2, 1, -(1+ (int)etc), 0);
+                case BuffType.HEAL: temp.Init((float)etc + addEtc, 1, -( (int)damage), 0);
                     break;
-                case BuffType.HASTE:temp.Init((float)damage, 0, -(float)(etc/100) );
+                case BuffType.HASTE:temp.Init((float)etc+addEtc, 0, -(float)(damage/100) );
                     break;
-                case BuffType.POWER: temp.Init((float)damage, 0, -(int)etc, -(int)etc/2);
+                case BuffType.POWER: temp.Init((float)etc + addEtc, 0, -(int)damage/3, -(int)damage/4);
                     break;
             }
         }
@@ -56,6 +58,8 @@ public class PeaceSkill : SkillObject
             if (costMp == true) target.virtualStatus.hp += (int)damage + 5;
             else target.virtualStatus.mp += (int)damage + 5;
         }
+        target.CheckOverHpMp();
+
         //디버프와 버프의 열거형을 똑같이 했으니 될것ㅎ..
 
         Destroy(this.GetComponent<Rigidbody>());
@@ -65,17 +69,6 @@ public class PeaceSkill : SkillObject
 
     }
 
-    /*
-    private BuffDebuff MakeComponent(GameObject target)
-        //버프는 1버프당 1스킬로 할것, 2단계스킬이라고 스까거나 그런거 절대없음
-        //사실상 플레이스 스킬과유사함 그런데 왜 따로 두냐면 셀프스킬라인은 단일로할것이기에
-        //ㄴ 그냥 타겟스킬에다가 값 몇개 추가하면되지않을까
-        //ㄴ 차라리 메이크컴포넌트 구문을 스킬오브젝트에 넣는게 나을듯
-    {
-        BuffDebuff temp;
-        GameObject objectTemp;
-    } 스킬오브젝트에 넣었기에 이걸 안하게될지도모름
-    */
     // Use this for initialization
     void Start()
     {

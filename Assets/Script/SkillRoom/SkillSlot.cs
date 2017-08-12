@@ -299,12 +299,12 @@ public class SkillSlot : MonoBehaviour, Slot, IDragHandler, IEndDragHandler,IPoi
             QuickSlot quickslot = data.pointerEnter.GetComponent<QuickSlot>();
             var iTemp = quickslot.GetComponent<InvenSlot>().item;
             //여기서 아이템 유무를 체크함 혹시모르니
-            if (iTemp != null)//maybe 아마 아이템이 존재한다면
+            if (iTemp.ID != 0)// 아이템이 존재한다면
             {
                 //아이템을 null로하고
                 quickslot.GetComponent<InvenSlot>().item = null;
                 //itemp를 통해백업했던 아이템을 인벤의 카운트만큼늘리고
-                GameManager.inst.GetComponent<Inventory>().AddItem(iTemp.ID, quickslot.GetComponent<InvenSlot>().count);
+                GameManager.inst.GetComponent<Inventory>().AddItem(iTemp.ID, quickslot.GetComponent<InvenSlot>().count,true);
                 //이카운트를 0으로
                 quickslot.GetComponent<InvenSlot>().count = 0;
             }
